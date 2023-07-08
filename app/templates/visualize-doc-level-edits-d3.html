@@ -1,0 +1,1311 @@
+{% if do_mturk %}
+
+<HTMLQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2011-11-11/HTMLQuestion.xsd">
+<HTMLContent><![CDATA[
+
+{% endif %}
+
+<!-- YOUR HTML BEGINS -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+</head>
+
+{% if do_mturk %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
+<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+<script src="https://cdn.jsdelivr.net/gh/qiao/difflib.js/dist/difflib-browser.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css">
+<script src="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions-pub@master/static/js/util.js"></script>
+
+{#<link rel='stylesheet' href="{{ url_for('static', filename='css/mycss.css') }}">#}
+{% else %}
+
+<script src="{{  url_for('static', filename='js/jquery-3.5.1.js') }}" crossorigin="anonymous"></script>
+<script src="{{  url_for('static', filename='js/bootstrap-v5.0.0.min.js') }}"></script>
+<script src="{{  url_for('static', filename='js/d3.v5.min.js') }}"></script>
+<script src="{{  url_for('static', filename='js/alertify.min.js') }}"></script>
+<script src="{{  url_for('static', filename='js/difflib-browser.js') }}" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="{{  url_for('static', filename='css/bootstrap-v5.0.0.min.css') }}">
+<link rel="stylesheet" href="{{  url_for('static', filename='css/alertify.min.css') }}" >
+<script src="{{  url_for('static', filename='js/util.js') }}"></script>
+<link rel='stylesheet' href="{{ url_for('static', filename='css/mycss.css') }}">
+
+{% endif %}
+
+<body>
+    <div class="row instructions">
+        <div class="col-12">
+            <div id="accordion">
+              <div class="card">
+                <div class="card-header" id="hello_header">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" href="#hello">
+                      Hello, about us, and thank you for your help!
+                    </button>
+                  </h5>
+                </div>
+                <div id="hello" class="collapse show" aria-labelledby="hello_header" data-parent="#accordion">
+                  <div class="card-body">
+                    Hello! We are small research collaboration at University of Southern California, University of Illinois Urbana-Champaign and
+                      University of California Los Angeles trying to build AI tools to help better understand the work journalists do.
+                    <br><br>
+                    Our goal in this work is to study how articles unfold over time — ultimately we'd like to build tools to help local news rooms allocate resources for breaking stories.
+                      First, we need to study how seasoned editors go about editing and updating stories.
+                    <br><br>
+                    We are calibrating our payment scheme <b>to meet a $25 per hour wage</b>. Apologies if at first it is miscalibrated, we're not sure at
+                      this moment how long the tasks will take.
+                      <br><br>
+                    Please take a moment to review some of the <b><u>Examples</u></b> and skim the <b><u>Instructions</u></b> in the sections below. If you've already watched the <b><u>Video</u></b> and have a good idea of the task, feel free to skip that section.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-bs-toggle="collapse" type="button" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Instructions
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body" id="inner-instructions">
+                        To complete the task, look at each sentence: if it's been <span class="added">added</span>,
+                        <span class="added">up</span>d<span class="deleted">at</span>ed, or <span class="deleted">deleted</span>
+                        between drafts,  try to determine based on your knowledge of the journalistic editing process
+                        why this was done.
+                        <br><br>
+                        You can specify multiple intentions for each <span class="added">add</span>/<span class="deleted">delete</span>/<span class="added">ed</span><span class="deleted">i</span>t
+                        operation. Please also pay attention to when sentences are moved around in a document
+                        (i.e. if that was done to emphasize or de-emphasize that sentence), and when there might be
+                        errors to how we are linking sentences.
+                        <br><br>
+                        We devised these in consultation with professional journalists. However, if you are consistently
+                        annotating edits with "Other" (i.e. we are missing something in our schema), please let us know!
+                        <br><br>
+                        <!-- actual instructions will go here. -->
+                        {{ instructions | safe  }}
+                    </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-bs-toggle="collapse" type="button" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                      Video
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <br><br>
+                        Here is a video showing how to interact with our page and a demonstration of the thought process I think is appropriate for this task. However, you are professional journalists and you know better than I do!
+                        <br><br>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/JMQuTFzoy_I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+
+<style>
+    svg {
+      position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+    circle {
+        {#z-index: 2;#}
+    }
+    .labelblock {
+        z-index: 3;
+    }
+
+    .textblock_pool_version_x{
+        padding-right: 0;
+    }
+
+    .textblock_pool_version_y{
+        padding-left: 0;
+    }
+    .blank_column{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .textblockwrapper{
+        padding: 0;
+    }
+    .labelblockwrapper{
+        padding: 0;
+    }
+
+    #main-svg{
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .link {
+        fill: none;
+        stroke: black;
+    }
+
+    .hidden {
+        transition: opacity 1s ease-out;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .example{
+        background-color: #efefef;
+        margin-left: 20px;
+        margin-right: 50px;
+        padding: 10px;
+        padding-bottom: 1px;
+    }
+
+    .highlighted {
+        background-color: yellow;
+    }
+
+    .text-mouseover{
+        border-style: solid;
+    }
+
+    #moving_div {
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        z-index: -1;
+    }
+    .moving_line {
+        z-index: -1;
+    }
+
+    /* Handle the question text-boxes */
+    .textblock {
+      border-radius: 4px;
+      background: rgba(237, 245, 241, 0.87);
+      border: 2px solid Black;
+      padding: 5px 10px 5px 10px;
+      margin: 10px 10px 10px 10px;
+      z-index: 1;
+    }
+
+    .labelblock {
+      border-radius: 1px;
+      background: rgba(187, 198, 188, 0.8);
+      border: 2px solid Black;
+      padding: 5px 10px 5px 10px;
+      margin: 10px 10px 10px 10px;
+      z-index: 1;
+    }
+
+    .textblock_pool {
+        height: 200px;
+    }
+
+    .textblock_span {
+        padding-right: 10px;
+    }
+
+    .shaded {
+        border-color: #55f;
+        stroke: #55f !important;
+        stroke-width: 2;
+        /*border-radius: 20px;*/
+        border-width: 2px;
+    }
+
+    .deleted{
+        background-color:rgba(241,114,114,0.68)
+    }
+
+    .added{
+        background-color:rgba(175, 255, 141, 0.6);
+    }
+
+    #submitButton{
+        z-index: 5;
+    }
+
+    hr.hr-medium{
+        border: 3px solid black;
+    }
+
+    body{
+        margin: 10px !important;
+    }
+
+    h2 {
+        font-size: calc(1.3rem + .1vw);
+    }
+
+    h3 {
+        font-size: calc(.9rem + .1vw);
+    }
+</style>
+{% if do_mturk %}
+    <form name='mturk_form' method='post' id='mturk_form' action='/mturk/externalSubmit'>
+{% endif %}
+<input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+    <div class="container-fluid">
+    <p>Article Key: {{ doc_id }}</p>
+    <br>
+    <div class="row header">
+        <div class="col-3"></div>
+        <div class="col-2"><h4>Old Version</h4></div>
+        <div class="col-2"></div>
+        <div class="col-2"><h4>New Version</h4></div>
+        <div class="col-3"></div>
+    </div>
+    <svg id="main-svg">
+        <div class="row text" id="main-div">
+            <div class="col-5 textblock_pool_version_x" doc_id="{{ doc_id }}" ></div>
+            <div class="col-2 blank_column"></div>
+            <div class="col-5 textblock_pool_version_y" doc_id="{{ doc_id }}" ></div>
+        </div>
+    </svg>
+</div>
+
+<input type='hidden' value='' name='data' id='data'/>
+<button type="submit" id='submitButton' value='Submit'>Submit form</button>
+</form>
+
+
+<script language='Javascript'>
+
+    Array.prototype.remove_one_by_value = function(val) {
+      for (var i = 0; i < this.length; i++) {
+        if (this[i].toString() === val.toString()) {
+          this.splice(i, 1);
+          break
+        }
+      }
+      return this;
+    };
+
+    function get_diff_ratio(s_old, s_new){
+        var s = new difflib.SequenceMatcher(null, s_old, s_new)
+        return s.ratio()
+    }
+
+
+    class InstructionsManager{
+        constructor(data){
+            this.data = data
+        }
+
+        draw(){
+            var that = this
+            var top_level_node = $('#inner-instructions')
+            this.data.forEach(function(d){
+                var second_level_elem = that.format_block(d, that)
+                $(top_level_node).append(second_level_elem)
+            })
+        }
+
+        format_block(datum, cls){
+            // special formatting
+            var elem;
+            if ( datum['class'] == 'second-level-category')
+                elem = cls.create_second_level_category(datum)
+            else if (datum['class'] == 'example-block')
+                elem = cls.process_example_block(datum)
+            else
+                elem = cls.create_div_basic(datum['content']['type'], datum['class'], datum['content']['content'])
+            for (var i = 0; i < datum.children.length; i++){
+                var child_elem = cls.format_block(datum.children[i], cls)
+                $(elem).append(child_elem)
+            }
+            return elem
+        }
+
+        create_div_basic(elem_type, classname, elem_content){
+            const new_div = document.createElement("div");
+            const new_elem = document.createElement(elem_type);
+            const new_content = document.createTextNode(elem_content)
+            $(new_div).addClass(classname)
+            $(new_elem).append(new_content)
+            $(new_div).append(new_elem)
+            return new_div
+        }
+
+        process_example_block(datum){
+            var content = datum['content']
+        }
+
+        create_second_level_category(datum){
+
+        }
+
+    }
+
+    // for the instructions
+    $('.image-show').on('click', function(d){
+        var img = $(this).parents('.example-image').find('img')
+        var is_hidden = $(img).hasClass('hidden')
+        if (is_hidden)
+            $(img).removeClass('hidden')
+        else
+            $(img).addClass('hidden')
+    })
+
+    var select_header = `
+        <select type="text" class="form-control please-specify" placeholder="Please specify sentence-id.">
+            <option value="" selected disabled></option>
+    `
+
+    var edit_select_html =`
+        <div class="input-group intentions-dropdown-input-group">
+            <select class="edit-intention form-select" prev_sel="">
+                <option value="" selected disabled></option>
+                <option value="" disabled>Clarification</option>
+                <option value="">&#160;&#160;&#160;Simplification</option>
+                <option value="">&#160;&#160;&#160;Define term</option>
+                <option value="">&#160;&#160;&#160;Emphasize a Point</option>
+                <option value="">&#160;&#160;&#160;Sensitivity Consideration</option>
+                <option value="" disabled>Copy Editing</option>
+                <option value="">&#160;&#160;&#160;Style-Guide Edits</option>
+                <option value="">&#160;&#160;&#160;Tonal Edits</option>
+                <option value="">&#160;&#160;&#160;Syntax Correction</option>
+                <option value="" disabled>Elaboration</option>
+                <option value="">&#160;&#160;&#160;Update Background</option>
+                <option value="">&#160;&#160;&#160;Update Analysis</option>
+                <option value="">&#160;&#160;&#160;Update Eye-witness account</option>
+                <option value="" disabled>Fact Update</option>
+                <option value="">&#160;&#160;&#160;Event Update</option>
+                <option value="">&#160;&#160;&#160;Quote Update</option>
+                <option value="">&#160;&#160;&#160;Source-Document Update</option>
+                <option value="" disabled>Verification</option>
+                <option value="">&#160;&#160;&#160;Correction</option>
+                <option value="">&#160;&#160;&#160;Additional Sourcing</option>
+                <option value="" disabled>Moved Intentionally</option>
+                <option value="">&#160;&#160;&#160;Emphasize importance</option>
+                <option value="">&#160;&#160;&#160;De-emphasize importance</option>
+                <option value="" disabled>Other</option>
+                <option value="">&#160;&#160;&#160;Error: Missing Link (Please Specify)</option>
+                <option value="">&#160;&#160;&#160;Error: Incorrect Link (Please Specify)</option>
+                <option value="">&#160;&#160;&#160;Other (Please Specify)</option>
+            </select>
+        </div>`
+
+    var unchanged_select_html = `
+        <div class="input-group intentions-dropdown-input-group">
+            <select class="edit-intention form-select" prev_sel="">
+                <option value="" selected>Unchanged</option>
+                <option value="" disabled>Moved Intentionally</option>
+                <option value="">&#160;&#160;&#160;Emphasize importance</option>
+                <option value="">&#160;&#160;&#160;De-emphasize importance</option>
+                <option value="" disabled>Errors</option>
+                <option value="">&#160;&#160;&#160;Error: Missing Link (Please Specify)</option>
+                <option value="">&#160;&#160;&#160;Error: Incorrect Link (Please Specify)</option>
+                <option value="">Other (Please Specify)</option>
+            </select>
+        </div>`
+
+    var delete_select_html = `
+        <div class="input-group intentions-dropdown-input-group">
+            <select class="edit-intention form-select" prev_sel="">
+                <option value="" selected disabled></option>
+                <option value="" disabled>Clarification</option>
+                <option value="">&#160;&#160;&#160;Simplification</option>
+                <option value="">&#160;&#160;&#160;De-emphasize a Point</option>
+                <option value="">&#160;&#160;&#160;Sensitivity Consideration</option>
+                <option value="" disabled>Copy Editing</option>
+                <option value="">&#160;&#160;&#160;Delete for Style-Guide</option>
+                <option value="">&#160;&#160;&#160;Delete Unwanted Tone</option>
+                <option value="" disabled>Elaboration</option>
+                <option value="">&#160;&#160;&#160;Delete Background</option>
+                <option value="">&#160;&#160;&#160;Delete Analysis</option>
+                <option value="">&#160;&#160;&#160;Delete Eye-witness account</option>
+                <option value="" disabled>Fact Deletion</option>
+                <option value="">&#160;&#160;&#160;Delete Event Reference</option>
+                <option value="">&#160;&#160;&#160;Delete Quote</option>
+                <option value="">&#160;&#160;&#160;Delete Source-Document Reference</option>
+                <option value="" disabled>Other</option>
+                <option value="">&#160;&#160;&#160;Error: Missing Link (Please Specify)</option>
+                <option value="">&#160;&#160;&#160;Other (Please Specify)</option>
+            </select>
+        </div>`
+
+    var add_select_html =`
+        <div class="input-group intentions-dropdown-input-group">
+            <select class="edit-intention form-select" prev_sel="">
+                <option value="" selected disabled></option>
+                <option value="" disabled>Clarification</option>
+                <option value="">&#160;&#160;&#160;Simplification</option>
+                <option value="">&#160;&#160;&#160;Define term</option>
+                <option value="">&#160;&#160;&#160;Emphasize a Point</option>
+                <option value="">&#160;&#160;&#160;Sensitivity Consideration</option>
+                <option value="" disabled>Copy Editing</option>
+                <option value="">&#160;&#160;&#160;Style-Guide Adherence</option>
+                <option value="">&#160;&#160;&#160;Tonal Improvement</option>
+                <option value="" disabled>Elaboration</option>
+                <option value="">&#160;&#160;&#160;Add Background</option>
+                <option value="">&#160;&#160;&#160;Add Analysis</option>
+                <option value="">&#160;&#160;&#160;Add Eye-witness account</option>
+                <option value="">&#160;&#160;&#160;Add Information (Other)</option>
+                <option value="" disabled>Fact Addition</option>
+                <option value="">&#160;&#160;&#160;Event Addition</option>
+                <option value="">&#160;&#160;&#160;Quote Addition</option>
+                <option value="">&#160;&#160;&#160;Source-Document Addition</option>
+                <option value="" disabled>Verification</option>
+                <option value="">&#160;&#160;&#160;Add Correction</option>
+                <option value="">&#160;&#160;&#160;Add Additional Sourcing</option>
+                <option value="" disabled>Other</option>
+                <option value="">&#160;&#160;&#160;Error: Missing Link (Please Specify)</option>
+                <option value="">&#160;&#160;&#160;Other (Please Specify)</option>
+            </select>
+        </div>`
+
+    var other_input_html = `<input type="text" class="form-control please-specify" placeholder="Please specify and report to us...">`
+
+    // page handling
+    class PageManager {
+        constructor(
+            data,
+            textblock_dim,
+            demo,
+            check,
+            doc_key,
+            textblock_pool_min
+        ) {
+            this.data = data
+            this.demo = demo
+            this.check = check
+            this.doc_key = doc_key
+            // dimensions for textblock divs
+            this.textblock_pool_min = textblock_pool_min
+            this.textblock_dim = textblock_dim;
+            this.start_line_id = null
+            // z-index for dropdown needs to increase every click :/ maybe not the best implementation
+            this.curr_dropdown_zindex = 3
+            this.num_lines = 0
+
+            // endpoint side-length
+            this.l = '10px'
+            var that = this
+            this.link = d3.linkHorizontal()
+                .source(function(d) {
+                    var node = $('#sentence-x-' + d.source).find('circle')
+                    return that._get_offset_to_svg_circle(node)
+                })
+                .target(function(d) {
+                    var node = $('#sentence-y-' + d.target).find('circle')
+                    return that._get_offset_to_svg_circle(node)
+                });
+        }
+
+        _add_one_arc_to_data_dictionaries(sent_idx_x, sent_idx_y, line_selector){
+            // update node data
+            // this.data.nodes.filter(e=> (e.sent_idx == d.sent_idx_x) & (e.version == this.x_vers))[0]
+            this.node_to_arc_dict['x'][sent_idx_x] = (this.node_to_arc_dict['x'][sent_idx_x] || []).concat(line_selector)
+            this.node_to_arc_dict['y'][sent_idx_y] = (this.node_to_arc_dict['y'][sent_idx_y] || []).concat(line_selector)
+            this.node_to_node_dict['x'][sent_idx_x] = (this.node_to_node_dict['x'][sent_idx_x] || []).concat(sent_idx_y)
+            this.node_to_node_dict['y'][sent_idx_y] = (this.node_to_node_dict['y'][sent_idx_y] || []).concat(sent_idx_x)
+            this.arc_to_node_dict[line_selector] = {'x': sent_idx_x, 'y': sent_idx_y}
+
+            this.add_del_redundancy['x'].remove_one_by_value(sent_idx_x)
+            this.add_del_redundancy['y'].remove_one_by_value(sent_idx_y)
+        }
+
+        _build_or_rebuild_node_edit_action_dict(){
+            var that = this
+            this.data.nodes.forEach(function (node){
+                var version = (node.version == that.x_vers) ? 'x' : 'y'
+                var sent_idx = node.sent_idx
+                var sentence = node.sentence
+                var other_nodes = that.node_to_node_dict[version][sent_idx] || []
+                // added or deleted
+                if (other_nodes.length == 0){
+                    var action = (version == 'x') ? 'deleted' : 'added'
+                } else {
+                    var all_incoming_text = that._helper_get_all_connected_text(sent_idx, version)
+                    var d = get_diff_ratio(sentence.trim(), all_incoming_text.trim())
+                    var action =  ( d < .99) ? 'edited' : 'unchanged'
+                }
+                that.node_edit_action_dict[version][sent_idx] = {'action' : action, 'other': other_nodes}
+            })
+        }
+
+        _remove_one_arc_from_data_dictionaries(sent_idx_x, sent_idx_y, line_selector){
+            this.node_to_arc_dict['x'][sent_idx_x].remove_one_by_value(line_selector)
+            this.node_to_arc_dict['y'][sent_idx_y].remove_one_by_value(line_selector)
+            this.node_to_node_dict['x'][sent_idx_x].remove_one_by_value(sent_idx_y)
+            this.node_to_node_dict['y'][sent_idx_y].remove_one_by_value(sent_idx_x)
+            // delete this.arc_to_node_dict[line_selector]
+
+            this.add_del_redundancy['x'].push(sent_idx_x)
+            this.add_del_redundancy['y'].push(sent_idx_y)
+        }
+
+        _process_data(){
+            var that = this
+
+            that.versions = this.data['nodes'].map(function(d){return d['version']})
+            that.x_vers = d3.min(that.versions)
+            that.y_vers = d3.max(that.versions)
+            that.version_mapper = {[that.x_vers]: 'x', [that.y_vers] : 'y'}
+
+            that.node_edit_action_dict = {'x': {}, 'y': {}}
+            that.data_by_version = {'x': [], 'y': []}
+            that.node_to_arc_dict = {'x': {}, 'y': {}} // map each node to a list of arcs
+            that.arc_to_node_dict = {} // map each arc to the nodes on either side of it
+            that.node_to_node_dict = {'x': {}, 'y': {}}
+            that.add_del_redundancy = {'x': [], 'y': [] } // not all arcs are marked.
+
+            // create textblocks
+            $(that.data.nodes)
+                .sort(function(a, b) {return a.sent_idx - b.sent_idx})
+                .each(function (i, d) {
+                    var vers = that.version_mapper[d.version]
+                    that.data_by_version[vers].push(d)
+                    that.node_edit_action_dict[vers][d.sent_idx] = {'action': 'unchanged'}
+                    that.add_del_redundancy[vers].push(d.sent_idx)
+                })
+
+            // find which nodes have been edited. Those that haven't are either added/deleted based on version.
+            that.data.arcs
+                .forEach( function(d){
+                    // edited nodes
+                    if((d.sent_idx_x != null) & (d.sent_idx_y != null)) {
+                        var line_selector = 'line-' + that.num_lines++
+                        that._add_one_arc_to_data_dictionaries(d.sent_idx_x, d.sent_idx_y, line_selector)
+                    }
+                })
+
+            // after all bipartite graph objects are built, then calculate the actions
+            that._build_or_rebuild_node_edit_action_dict()
+
+            // deleted nodes
+            that.add_del_redundancy['x'].forEach(function(d){
+                that.node_edit_action_dict['x'][d] = {'action': 'deleted'}
+            })
+
+            // added nodes
+            that.add_del_redundancy['y'].forEach(function(d){
+                that.node_edit_action_dict['y'][d] = {'action': 'added'}
+            })
+
+            // cache the HTML for dropdown specification.
+            that._make_dropdown_sentence_selector_for_errors()
+        }
+
+        _make_dropdown_sentence_selector_for_errors(){
+            var that = this
+            this.missing_link_selector_html = {}
+            var vers = ['x', 'y']
+            vers.forEach(function(this_version){
+                var other_version = (this_version == 'x')? 'y' : 'x'
+
+                // handle missing links
+                var other_nodes = Object.entries(that.node_edit_action_dict[other_version]).map(d => d[0])
+                var other_nodes_html = other_nodes.map(d => '<option value="S' + d + '"> S' + d + '</option>')
+                that.missing_link_selector_html[this_version] = select_header + other_nodes_html + '</select>'
+
+                // handle incorrect links
+                Object.keys(that.node_to_node_dict[this_version]).forEach(function(node){
+                })
+            })
+        }
+
+        _make_rows(version){
+            var that = this
+            return d3.select('.textblock_pool_version_' + version)
+                    .selectAll('textblock')
+                    .data(that.data_by_version[version]).enter()
+                    .append('div').classed('row', true).classed('sentence-block', true)
+                    .attr('sent-idx', d=>d.sent_idx)
+        }
+
+        _helper_get_all_connected_text(sent_idx, version){
+            // get sentences for connecting textblocks
+            var other_vers = (version == 'x') ? 'y' : 'x'
+            var other_nodes = this.node_to_node_dict[version][sent_idx]
+            return other_nodes.map(d => this.data_by_version[other_vers][d].sentence).join(' ')
+        }
+
+        _helper_get_textblock_html(sent_idx, version){
+            var sentence = this.data_by_version[version][sent_idx].sentence
+            var action = this.node_edit_action_dict[version][sent_idx].action
+            if (action != 'edited')
+                return 'S' + sent_idx + ': ' + sentence
+
+            var all_incoming_text = this._helper_get_all_connected_text(sent_idx, version)
+            if (version == 'x') {
+                var s_text = html_compare_sentences(sentence, all_incoming_text)[0]
+            } else {
+                var s_text = html_compare_sentences(all_incoming_text, sentence)[1]
+            }
+            return 'S' + sent_idx + ': ' + s_text
+        }
+
+        _draw_textblocks(rows_obj, version){
+            var that = this
+            return rows_obj
+                .append('div').classed('textblockwrapper', true).classed('col-6', true) // so that the margin goes on the inside
+                .append('div').classed('textblock', true)
+                .attr('doc_id', that.doc_key)
+                .attr('id', d => 'sentence-' + version + '-' + d.sent_idx)
+                .attr('version', d => that.version_mapper[d.version])
+                .attr('orig-text', d => d.sentence)
+                .attr('class', function(d){
+                    return $(this).attr('class') + " " + that.node_edit_action_dict[version][d.sent_idx].action
+                })
+                .append('span').classed('textblock_span', true)
+                .html(d => 'S' + d.sent_idx + ': ' + d.sentence)
+        }
+
+        _helper_get_action(sent_idx, version){
+            if ((version != 'x') && (version != 'y')) {
+                version = this.version_mapper[version]
+            }
+            return this.node_edit_action_dict[version][sent_idx].action
+        }
+
+        _helper_get_labelblock_html_header(sent_idx, version, action){
+            if (action == undefined)
+                action = this._helper_get_action(sent_idx, version)
+            switch(action){
+                case 'added': var header = 'Addition Intention'; break;
+                case 'edited': var header = 'Edit Intention'; break;
+                case 'deleted': var header = 'Deletion Intention'; break;
+                case 'unchanged': var header = 'Unchanged Sentence <br> (Did we make an error?)'; break
+            }
+            return '<p>' + header + '</p>'
+        }
+
+        _draw_labelblocks(rows_obj, version){
+            var that = this
+            function _helper_get_labelblock_html_select(d, that, action){
+                if (action == undefined)
+                    action = that._helper_get_action(d.sent_idx, d.version)
+                switch(action){
+                    case 'added': return add_select_html; break;
+                    case 'edited': return edit_select_html; break;
+                    case 'deleted': return delete_select_html; break;
+                    case 'unchanged': return unchanged_select_html; break;
+                }
+            }
+            function _is_hidden(d){
+                var vers = that.version_mapper[d.version]
+                var datum = that.node_edit_action_dict[vers][d.sent_idx]
+                //if ((datum.action == undefined) | (datum.action == 'unchanged'))
+                //    return true
+                //else
+                return ((vers == 'y') & (datum.action == 'edited' || datum.action == 'unchanged'))
+            }
+
+            // base labelblock object
+            var labelblock_obj = rows_obj.append('div').classed('labelblockwrapper', true).classed('col-6', true)
+                    .append('div').classed('labelblock', true).classed('row', true)
+                    .classed('hidden', _is_hidden)
+                    .attr('doc_id', that.doc_key)
+                    .attr('num_slots', 1).attr('version', version)
+                    .attr('id', d => 'label-' + version + '-' + d.sent_idx)
+
+                // label header
+                labelblock_obj.append('div').classed('label-header', true)
+                    .html(d => that._helper_get_labelblock_html_header(d.sent_idx, d.version))
+
+                // labelblock select dropdown
+                labelblock_obj.append('div').classed('dropdown_column', true).classed('col-8', true)
+                    .append('div').classed('input_fields', true).classed('slot_num_1', true).attr('slot_num', 1)
+                    .html(d => _helper_get_labelblock_html_select(d, that))
+
+            // base button object
+            var button_obj = labelblock_obj.append('div')
+                                            .classed('button_column', true).classed('col-4', true)
+
+                // plus button
+                button_obj.append('div').classed('btn', true).classed('btn-secondary', true)
+                                        .style('width', '50%').html('+')
+                                        .classed('labelblock_' + version + '_button_plus', true)
+
+                // minus button
+                button_obj.append('div').classed('btn', true).classed('btn-secondary', true)
+                                        .style('width', '50%').html('-')
+                                        .classed('labelblock_' + version + '_button_minus', true)
+
+            $('.labelblock_' + version + '_button_plus').on('click', function(){
+                // make sure we're keeping track of the number of slots
+                var existing_slots = $(this).parents('.labelblock').attr('num_slots')
+                var slot_num = parseInt(existing_slots) + 1
+                $(this).parents('.labelblock').attr('num_slots', slot_num)
+
+                // generate the HTML for the new select dropdown
+                var sent_idx = $(this).parents('.labelblock').attr('id').split('-')[2]
+                var version = $(this).parents('.labelblock').attr('version')
+                var action = that._helper_get_action(sent_idx, version)
+                var col = $(this).parents('.labelblock').find('.dropdown_column')
+                var select_html = _helper_get_labelblock_html_select(null, null, action)
+                var select_html_sel = $('<div>' + select_html + '</div>').appendTo(col)
+                    .addClass('slot_num_' + slot_num).addClass('input_fields')
+                    .attr('slot_num', slot_num)
+                that._handle_select_actions(select_html_sel.find('select'))
+            })
+
+            $('.labelblock_' + version + '_button_minus').on('click', function(){
+                // get the number of slots and make sure we're not erasing the last one.
+                var existing_slots = $(this).parents('.labelblock').attr('num_slots')
+                if (existing_slots > 1) {
+                    var slot_num = parseInt(existing_slots) - 1
+                    // remove the select dropdown
+                    var sel_elem = $(this).parents('.labelblock').find('.slot_num_' + existing_slots)
+                    var sel_elem_val = sel_elem.find('.edit-intention').find(':selected').text().trim()
+
+                    //  We are UNDOING user actions here.
+                    //  If we're removing an add-link or remove-link slot, make sure we remove the links visually
+                    var sent_idx = sel_elem.parents('.labelblock').attr('id').split('-')[2]
+                    var inner_sel_elem = sel_elem.find('.please-specify')
+                    var sel_sent_val = inner_sel_elem.attr('prev_sel_val')
+                    if (sel_sent_val != '') {
+                        if (sel_elem_val == 'Error: Missing Link (Please Specify)') {
+                            // If the user had previously inputting "Missing link", that means
+                            // the user added a link. Thus, we have to remove one.
+                            var sel_line_val = inner_sel_elem.attr('prev_line_val')
+                            that._subhelper_remove_line(sent_idx, sel_sent_val, sel_line_val, version)
+                        } else if (sel_elem_val == 'Error: Incorrect Link (Please Specify)') {
+                            // If the user had previously inputted an "Incorrect Link" that means
+                            // the user removed a link. Thus, we have a link to add.
+                            that._subhelper_add_line(sent_idx, sel_sent_val, null, version)
+                        }
+                    }
+
+                    sel_elem.remove()
+                    $(this).parents('.labelblock').attr('num_slots', slot_num)
+                }
+            })
+        }
+
+        draw_canvas(){
+            this._process_data()
+
+            // create textblock rows ( x => label pool, textblock pool)
+            var rows_x = this._make_rows('x')
+            this._draw_labelblocks(rows_x, 'x')
+            this._draw_textblocks(rows_x, 'x')
+            // create textblock rows ( y => textblock pool, label pool)
+            var rows_y = this._make_rows('y')
+            this._draw_textblocks(rows_y, 'y')
+            this._draw_labelblocks(rows_y, 'y')
+
+            // draw connections
+            this._draw_all_connections()
+        }
+
+        _add_endpoint(textblock_id, side){
+            var side_class = side == 'x' ? 'start-100' : 'start-0'
+            d3.select('#' + textblock_id)
+                .classed('position-relative', true)
+            .append('div').style('width', this.l).style('height', this.l)
+                .classed('anchor', true)
+                .classed('position-absolute', true)
+                .classed('top-50', true)
+                .classed(side_class, true)
+                .classed('translate-middle', true)
+                .attr('id', 'endpoint-' + textblock_id)
+            .append('svg').style('height', '100%').style('width', '100%')
+                .append('circle')
+                .attr('r', '50%')
+                .attr('cx', '50%').attr('cy', '50%').style('fill', 'gray')
+        }
+
+        _get_offset_to_svg_circle(d){
+            var svg_off_l = $('#main-svg').offset().left,
+                svg_off_t = $('#main-svg').offset().top,
+                el_off_l = $(d).offset().left,
+                el_off_t = $(d).offset().top,
+                el_r = parseFloat(this.l.replace('px', '')) / 2
+            return [el_off_l - svg_off_l + el_r, el_off_t - svg_off_t + el_r]
+        }
+
+        _draw_all_connections(){
+            var that = this
+            $('#main-svg').height($('#main-div').height())
+            Object.entries(that.arc_to_node_dict).forEach(function(d) {
+                that._subhelper_add_line(d[1].x, d[1].y, d[0], null, true)
+            })
+        }
+
+        _subhelper_add_line(source_sent_idx, target_sent_idx, line_sel, version, no_state_update){
+            if ((version == undefined) || (version == null)){
+                version = 'x'
+            }
+
+            if (line_sel == null){
+                line_sel = this._get_arc_given_nodes(source_sent_idx, target_sent_idx, version)
+            }
+
+            var x = (version == 'x') ? source_sent_idx : target_sent_idx
+            var y = (version == 'x') ? target_sent_idx : source_sent_idx
+
+            var connection_datum = {
+                'source': x,
+                'target': y,
+                'line': line_sel,
+            }
+
+            // draw endpoints
+            this._add_endpoint('sentence-x-' + x, 'x')
+            this._add_endpoint('sentence-y-' + y, 'y')
+
+            // draw connector
+            d3.select('#main-svg').append('path')
+                .attr('d', this.link(connection_datum)).classed('link', true)
+                .attr('id', line_sel)
+                .attr('source', source_sent_idx).attr('target', target_sent_idx)
+
+            // For the base line-drawer, `draw_all_connections`, we don't want to update the internal state dicts.
+            if (no_state_update == undefined || no_state_update == false) {
+                // But for free-drawing lines, we do want to update internal state dictionaries.
+                this._add_one_arc_to_data_dictionaries(x, y, line_sel)
+                this._build_or_rebuild_node_edit_action_dict()
+            }
+
+            // update HTML of the textblock
+            $('#sentence-x-' + x + ' > span').html(this._helper_get_textblock_html(x, 'x'))
+            $('#sentence-y-' + y + ' > span').html(this._helper_get_textblock_html(y, 'y'))
+            $('#sentence-x-' + x).removeClass('deleted').addClass(this.node_edit_action_dict['x'][x]['action'])
+            $('#sentence-y-' + y).removeClass('added').addClass(this.node_edit_action_dict['y'][y]['action'])
+            $('#label-x-' + x).find('.label-header').html(this._helper_get_labelblock_html_header(x, 'x'))
+            $('#label-y-' + y).find('.label-header').html(this._helper_get_labelblock_html_header(y, 'y'))
+
+            if (this.node_edit_action_dict['y'][y]['action'] == 'edited')
+                $('#label-y-' + y).addClass('hidden')
+
+            // in case the HTML update caused any lines to shift
+            this._update_connection_position()
+        }
+
+        _subhelper_remove_line(source_sent_idx, target_sent_idx, line_sel, version){
+            var x = (version == 'x') ? source_sent_idx : target_sent_idx
+            var y = (version == 'x') ? target_sent_idx : source_sent_idx
+
+            if (line_sel == null)
+                line_sel = this._get_arc_given_nodes(source_sent_idx, target_sent_idx, version)
+
+            $('#endpoint-sentence-x-' + x).remove()
+            $('#endpoint-sentence-y-' + y).remove()
+            $('#' + line_sel).remove()
+
+            this._remove_one_arc_from_data_dictionaries(x, y, line_sel)
+            this._build_or_rebuild_node_edit_action_dict()
+
+            $('#sentence-x-' + x + ' > span').html(this._helper_get_textblock_html(x, 'x'))
+            $('#sentence-y-' + y + ' > span').html(this._helper_get_textblock_html(y, 'y'))
+            $('#sentence-x-' + x).removeClass('edited').addClass(this.node_edit_action_dict['x'][x]['action'])
+            $('#sentence-y-' + y).removeClass('edited').addClass(this.node_edit_action_dict['y'][y]['action'])
+            $('#label-x-' + x).find('.label-header').html(this._helper_get_labelblock_html_header(x, 'x'))
+            $('#label-y-' + y).find('.label-header').html(this._helper_get_labelblock_html_header(y, 'y'))
+
+            if (this.node_edit_action_dict['y'][y]['action'] == 'added')
+                $('#label-y-' + y).removeClass('hidden')
+
+            this._update_connection_position()
+        }
+
+        _helper_add_line(input_group, version, sent_idx){
+            // function outline:
+            // -----
+            // The intention of this function was to make it possible for users to fully handle errors,
+            // giving them a flexible interface that will update the lines shown between sentences. It is a work in
+            // progress given the amount of refactoring that will need to take place to make this possible.
+            var that = this
+
+            // make select element
+            var sel_elem = $(that.missing_link_selector_html[version])
+            input_group.append(sel_elem);
+
+            var prev_val = sel_elem.find(':selected').val().replace('S', '')
+            sel_elem.attr('prev_sel_val', prev_val)
+
+            var new_line_sel = 'line-' + this.num_lines++
+
+            // if there is a default value in the error box, draw it
+            if (prev_val != '') {
+                that._subhelper_add_line(sent_idx, prev_val, new_line_sel, version)
+                $(sel_elem).attr('prev_line_val', new_line_sel)
+            }
+
+            sel_elem.on('change', function(){
+                // 1. draw line
+                var curr_sel_val = $(this).find(':selected').val().replace('S', '')
+                var prev_sel_val = $(this).attr('prev_sel_val')
+
+                // 1a. If the user had previously made another selection, that means there's a previously-added
+                //     line that we need to remove. Thus, remove that previous line.
+                if (prev_sel_val != ''){
+                    var prev_line_val = $(this).attr('prev_line_val')
+                    that._subhelper_remove_line(sent_idx, prev_sel_val, prev_line_val, version)
+                }
+
+                // 1b. Now, we're ready to draw the NEW line.
+                that._subhelper_add_line(sent_idx, curr_sel_val, new_line_sel, version)
+                $(this).attr('prev_sel_val', curr_sel_val)
+                $(this).attr('prev_line_val', new_line_sel)
+            })
+        }
+
+        _get_arc_given_nodes(sent_idx, other_idx, version){
+            var x = (version == 'x') ? sent_idx : other_idx
+            var y = (version == 'x') ? other_idx : sent_idx
+            return Object.entries(this.arc_to_node_dict).filter(d=>d[1].x == x & d[1].y == y)[0][0]
+        }
+
+        _helper_remove_line(input_group, version, sent_idx){
+            // handles everything associated with pressing the "Error: Inccorect Line" selection:
+            //     1. Adds a new dropdown to specify which line it is.
+            //     2. Handles if there is a default value.
+            //     3. Handles the mechanics of the dropdown changes.
+
+            function _helper_make_incorrect_link_selector_html(sent_idx, version){
+                var other_nodes = that.node_to_node_dict[version][sent_idx]
+                if (other_nodes.length > 1) {
+                    var other_nodes_html = other_nodes.map(d => '<option value="S' + d + '"> S' + d + '</option>')
+                    return select_header + other_nodes_html + '</select>'
+                } else {
+                    return `
+                        <select type="text" class="form-control please-specify" placeholder="Please specify sentence-id.">
+                            <option value="S` + other_nodes[0] + `" selected disabled> S` + other_nodes[0] + `</option>
+                    `
+                }
+            }
+
+            var that = this
+            // 1. add dropdown HTML so the user can select which line needs to be removed
+            var sel_elem = $(_helper_make_incorrect_link_selector_html(sent_idx, version))
+            input_group.append(sel_elem);
+
+            // 1a. There might be a the previously selected value from the dropdown, if there is only 1 line.
+            //     If so, store it.
+            var prev_sel_val = sel_elem.find(':selected').val().replace('S', '')
+            sel_elem.attr('prev_sel_val', prev_sel_val)
+
+            // If there is a default value in the error box, remove that line (only the case if there is 1 line).
+            if (prev_sel_val != '') {
+                that._subhelper_remove_line(sent_idx, prev_sel_val, null, version)
+            }
+
+            // 2. Handle changes to the selection dropdown.
+            sel_elem.on('change', function(){
+                // 1. Draw line
+                var curr_sel_val = $(this).find(':selected').val().replace('S', '')
+                var prev_sel_val = $(this).attr('prev_sel_val')
+
+                // 1a. Add back the previous line that was removed
+                if (prev_sel_val != ''){
+                    // Add back the line
+                    that._subhelper_add_line(sent_idx, prev_sel_val, null, version)
+                }
+
+                that._subhelper_remove_line(sent_idx, curr_sel_val, null, version)
+                $(this).attr('prev_sel_val', curr_sel_val)
+                $(this).attr('prev_line_val', line_val)
+            })
+        }
+
+        _handle_select_actions(sel){
+            // handle the actions that happen when the select dropdown is triggered.
+            if (sel == undefined)
+                sel = 'select.edit-intention'
+
+            var that = this
+
+            // handle selections
+            $(sel).on('change', function() {
+                var prev_sel_val = $(this).attr('prev_sel')
+                var selected_value = $(this).find(':selected').text().trim()
+                var input_group = $(this).parents('.intentions-dropdown-input-group')
+                var version = $(this).parents('.labelblock').attr('version')
+                var sent_idx = $(this).parents('.sentence-block').attr('sent-idx')
+
+                // handle previous selected value statefulness
+                var inner_sel_elem = $(this).parents('.intentions-dropdown-input-group').find('.please-specify')
+                var sel_sent_val = inner_sel_elem.attr('prev_sel_val')
+                if (sel_sent_val != '') {
+                    if (prev_sel_val == 'Error: Missing Link (Please Specify)'){
+                        // if the user had inputted a "missing link" that means we have a link to remove.
+                            var sel_line_val = inner_sel_elem.attr('prev_line_val')
+                            that._subhelper_remove_line(sent_idx, sel_sent_val, sel_line_val, version)
+                    } else if (prev_sel_val == 'Error: Incorrect Link (Please Specify)'){
+                        // if the user had previously inputted an "incorrect link" that means we have a link in the original
+                        // that we took out. Thus, we need to add back the original line.
+                        that._subhelper_add_line(sent_idx, sel_sent_val, null, version)
+                    }
+                }
+
+                input_group.find('.please-specify').remove()
+                // handle current selected value
+                switch (selected_value) {
+                    case 'Other (Please Specify)': input_group.append(other_input_html); break;
+                    case 'Error: Missing Link (Please Specify)':
+                        that._helper_add_line(input_group, version, sent_idx); break;
+                    case 'Error: Incorrect Link (Please Specify)':
+                        that._helper_remove_line(input_group, version, sent_idx); break;
+                }
+                $(this).attr('prev_sel', selected_value)
+            });
+        }
+
+        _update_connection_position(){
+            var that = this
+            $('#main-svg').height($('#main-div').height())
+            d3.selectAll('.link').attr('d', function(d){
+                var source = $(this).attr('source')
+                var target = $(this).attr('target')
+                return that.link({'source': source, 'target': target})
+            })
+        }
+
+        _post_drawing_page(){
+            // handle mouseovers
+            const this_pagemanager = this
+            $('.textblock, .labelblock')
+                .on('mouseover', function(){
+                    var this_block = this
+                    var block_num = this.id.split('-')[2]
+                    $(this_block).parent().parent().find('.textblock,.labelblock').addClass('shaded')
+
+                    // update all the nodes on the other side as this node.
+                    var version = $(this_block).attr('version')
+                    var version_swap = {'x':'y', 'y':'x'}
+                    var other_version = version_swap[version]
+                    var node_arcs = this_pagemanager.node_to_arc_dict[version][block_num] || []
+                    node_arcs.forEach(function(d){
+                        // shade the arc itself
+                        $('#' + d).addClass('shaded')
+                        // get other textblock and the html that it should update to.
+                        var other_sel = this_pagemanager.arc_to_node_dict[d][other_version]
+                        // shade the other textblock that the arc connects
+                        $('#sentence-' + other_version + '-' + other_sel).addClass('shaded')
+                        $('#label-' + other_version + '-' + other_sel).addClass('shaded')
+                    })
+                })
+                .on('mouseout', function(d) {
+                    $('.link').removeClass('shaded')
+                    $('.textblock').removeClass('shaded')
+                    $('.labelblock').removeClass('shaded')
+                })
+
+            // handle movements
+            $(window).on('load resize', function() { this_pagemanager._update_connection_position(this_pagemanager) })
+            $('.btn').on('click', function() { this_pagemanager._update_connection_position(this_pagemanager) })
+
+            this_pagemanager._handle_select_actions()
+        }
+    }
+
+    textblock_dims = {
+		'margin': 5,
+		'border': 2,
+		'padding': 10
+	}
+
+	textblock_pool_min_height = 200
+
+    var data = JSON.parse('{{ data | tojson | safe }}'.replaceAll('NaN', 'null'))
+    var pm = new PageManager(data, textblock_dims, false, false, "{{ doc_id }}", textblock_pool_min_height)
+    pm.draw_canvas()
+    pm._post_drawing_page()
+    var IS_CHECKED = false
+
+    // mturk
+    // handle data
+    class SubmitHandler{
+        constructor(pm) {
+            {% if do_mturk %}
+                turkSetAssignmentID();
+            {% endif %}
+            this.GENERIC_THANKS_MESSAGE = 'Thank you so much for your help with our task!'
+            this.pm = pm
+            this.checked = false
+        }
+
+        get_data_from_dom() {
+            this.output = []
+            var that = this
+            var ids = $('.labelblock').map(function(i, d){return $(d).attr('id')})
+            var versions = $(ids).map(function(i, d){return d.split('-')[1]})
+            var sent_idxs = $(ids).map(function(i, d){return d.split('-')[2]})
+            var is_hidden = $('.labelblock').map(function(i, d){return $(d).hasClass('hidden')})
+
+            //
+            $('.labelblock').each(function(i, label_block){
+                var labels = $(label_block).find('.input_fields').map(function(i, d){
+                    var selections = $(d).find(":selected")
+                    var output_block = {
+                        'label': selections[0].text.trim(),
+                        'intention_num': $(d).attr('slot_num'),
+                    }
+                    // for Errors, `.find` returns another `option` block
+                    if (selections.length == 2){
+                        output_block['specified_link'] = selections[1].text.trim()
+                    }
+                    return output_block
+                })
+
+                var datum = {}
+                datum['version'] = versions[i]
+                datum['sent_idx'] = sent_idxs[i]
+                var action = that.pm.node_edit_action_dict[versions[i]][sent_idxs[i]]
+                if (action.action == 'edited'){
+                    datum['action'] = 'edited'
+                    datum['other_version_sent_idx'] = action.other
+                } else {
+                    datum['action'] = action.action
+                }
+                datum['is_hidden'] = is_hidden[i]
+                datum['labels'] = labels.toArray()
+                that.output.push(datum)
+            })
+        }
+
+        gather_and_submit_data(submit_button, submit_click_event) {
+            this.submit_button = submit_button
+            this.submit_click_event = submit_click_event
+            this.get_data_from_dom()
+            this.first_confirm() // -> second_confirm -> third_confirm -> submit_data
+        }
+
+        first_confirm(){
+            var that = this
+            var mapper = {'x': 'Left-hand (Old) Column', 'y': 'Right-hand (New) Column'}
+            // First question
+            var non_hidden_data = that.output.filter(function(d, i){ return d['is_hidden'] == false })
+            var all_input_rows = non_hidden_data.flatMap(function(d){return {
+                'version': d.version,
+                'sent_idx': d.sent_idx,
+                'labels': d.labels.map(function (d) {
+                    return { 'label': d.label, 'specified_link': d.specified_link }
+                })
+            }})
+
+            var uncompleted_labels = all_input_rows
+                .filter(function(d) { return d.labels.filter(function(e) { return e.label == '' }).length > 0})
+
+            var uncompleted_links = all_input_rows
+                .filter(function(d) { return d.labels.filter(function(e) { return e.specified_link == '' }).length > 0})
+
+            if (uncompleted_labels.length > 0){
+                var loc_str = uncompleted_labels.map(function(d) {return mapper[d.version] + ': S' + d.sent_idx } )
+                loc_str = loc_str.join(', ')
+                alert('You have unfilled "Intention" boxes in cells: [' + loc_str + ']. Please check and resubmit!!')
+            } else if (uncompleted_links.length  > 0) {
+                var loc_str = uncompleted_links.map(function(d) {return mapper[d.version] + ': S' + d.sent_idx } )
+                loc_str = loc_str.join(', ')
+                alert('You have other unfilled boxes in cells: [' + loc_str + ']. (These are the dropdowns asking you to ' +
+                    'specify which sentences should be linked.) Please check and resubmit!!')
+            }
+            else {
+                that.second_confirm()
+            }
+        }
+
+        second_confirm(){
+            var that = this
+            setTimeout(function() {
+                alertify.confirm(
+                    "Great! Your submission is valid. Do you want to recheck your answers?"
+                ).set('header', '<em>Looks good! Ready to Submit?</em>')
+                    .set('labels', {
+                        ok: "Continue, submit!",
+                        cancel: "Let me recheck..."
+                    })
+                    .set('onok', function () {
+                        alertify.success('Ok! Submitting...')
+                        alertify.success(that.GENERIC_THANKS_MESSAGE)
+                        that.submit_data()
+                    })
+                    .set('oncancel', function () {
+                        alertify.error('Thanks for being diligent! Please recheck and resubmit!')
+                    })
+            }, 700)
+        }
+        submit_data(){
+            IS_CHECKED = true
+            {% if do_mturk %}
+            // submit mturk
+            $('#data').attr('value', JSON.stringify(this.output))
+            $(this.submit_button).trigger(this.submit_click_event.type);
+            {% else %}
+            // submit AJAX
+            var to_submit = {'data': this.output}
+            to_submit['start_time'] = "{{ start_time }}"
+            to_submit['doc_id'] = "{{ doc_id | safe }}"
+            $.ajax({
+                url: "/post_task",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(to_submit),
+                success: function (result) {
+                    if (result === "success") location.href = "/check_task"
+                }
+            })
+            {% endif %}
+        }
+    }
+
+    // submit button click
+    var clicked=false
+    $('#submitButton').on('click', function(submit_click_event){
+        var sh = new SubmitHandler(pm)
+        var submit_button = this
+        if ( IS_CHECKED === false) {
+            submit_click_event.preventDefault();
+            sh.gather_and_submit_data(submit_button, submit_click_event);
+        }
+    })
+
+</script>
+</body>
+</html>
+<!-- YOUR HTML ENDS -->
+
+{% if do_mturk %}
+]]>
+</HTMLContent>
+<FrameHeight>600</FrameHeight>
+</HTMLQuestion>
+{% endif %}
+
+
+
+
+
+
+{##}
+{#            this.data_by_version = d3.nest()#}
+{#                .key(d=>that.version_mapper[d.version])#}
+{#                .entries(that.data.nodes)#}
+{#                .map(d=>[d.key, d.values])#}
+{##}
+{#            this.add_del_redundancy = Object.fromEntries(#}
+{#                this.data_by_version#}
+{#                    .map(d=>[d[0], d[1].map(d=>d.sent_idx).sort()])#}
+{#            )#}
+{##}
+{#            this.node_edit_action_dict = Object.fromEntries(#}
+{#                this.data_by_version#}
+{#                    .map(d=>[d[0], Object.fromEntries(d[1].map(d=>[d.sent_idx, "unchanged"]))])#}
+{#            )#}
+{##}
+{#            this.data_by_version = Object.fromEntries(this.data_by_version)#}
+{##}
+{#            this.rows = d3.nest()#}
+{#                .key(d=>d['sent_idx'])#}
+{#                .entries(that.data.nodes)#}
+{#                .map(d=>d.values.sort(function(a, b){return  b.version - a.version}))#}

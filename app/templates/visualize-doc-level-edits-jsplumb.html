@@ -1,0 +1,1039 @@
+{% if do_mturk %}
+
+<HTMLQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2011-11-11/HTMLQuestion.xsd">
+<HTMLContent><![CDATA[
+
+{% endif %}
+
+<!-- YOUR HTML BEGINS -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+</head>
+<link type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://creativecouple.github.io/jquery-timing/jquery-timing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<!-- ContextMenu -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
+<!-- alertify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/themes/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/themes/default.css"> -->
+<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+
+<script src="https://cdn.jsdelivr.net/gh/qiao/difflib.js/dist/difflib-browser.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/musclesoft/jquery-connections/jquery.connections.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/css/jsplumbtoolkit-defaults.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/css/jsplumbtoolkit-demo.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/css/main.css">
+
+<script src="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/js/jquery.validate.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/js/jsplumb.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/js/additional-methods.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alex2awesome/edit-intentions@master/app/static/js/jsplumb.js"></script>
+
+
+<style>
+    .hidden {
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.example{
+    background-color: #efefef;
+    margin-left: 20px;
+    margin-right: 50px;
+    padding: 10px;
+    padding-bottom: 1px;
+}
+
+.highlighted {
+	background-color: yellow;
+}
+
+.text-mouseover{
+	border-style: solid;
+}
+
+#moving_div {
+	position: fixed;
+	width: 1px;
+	height: 1px;
+	z-index: -1;
+}
+.moving_line {
+	z-index: -1;
+}
+
+/* Handle the question text-boxes */
+.textblock {
+  border-radius: 4px;
+  background: rgba(237, 245, 241, 0.87);
+  display: inline-block;
+  border: 2px solid Black;
+  padding: 5px 10px 5px 10px;
+  margin: 10px 10px 10px 10px;
+  z-index: 1;
+}
+
+.labelblock {
+  border-radius: 1px;
+  background: rgba(187, 198, 188, 0.8);
+  display: inline-block;
+  border: 2px solid Black;
+  padding: 5px 10px 5px 10px;
+  margin: 10px 10px 10px 10px;
+  z-index: 1;
+}
+
+.textblock_pool {
+	height: 200px;
+}
+
+.textblock_span {
+	padding-right: 10px;
+}
+
+.subset-subj {
+	background: rgba(175, 255, 141, 0.6);
+	background-color: rgba(175, 255, 141, 0.6);
+}
+
+/* handle line styles*/
+.connection {
+	border: 20px;
+    border-width: 2.5px;
+	z-index: 0;
+	/*display: table;*/
+	border-radius: 100%;
+	/*pointer-events:none;*/
+	color: rgb(200, 200, 200);
+	color: rgba(0, 0, 0, 0.7);
+}
+
+.shaded {
+	border-color: #55f;
+    /*border-radius: 20px;*/
+    /*border-width: 5px;*/
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 100;
+}
+
+
+.deleted{
+    background-color:rgba(241,114,114,0.68)
+}
+
+.added{
+    background-color:rgba(175, 255, 141, 0.6);
+}
+
+.annotation{
+    height: 50%;
+}
+
+#submitButton{
+    z-index: 5;
+}
+
+#feedback{
+    width: 100%;
+}
+
+hr.hr-medium{
+    border: 3px solid black;
+}
+
+body{
+    margin: 10px !important;
+}
+
+/* arrows */
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  position: relative;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+</style>
+<!-- jquery connections -->
+<body>
+
+    <div class="row instructions">
+        <div class="col-12">
+            <div id="accordion">
+              <div class="card">
+                <div class="card-header" id="hello_header">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#hello">
+                      Hello, about us, and thank you for your help!
+                    </button>
+                  </h5>
+                </div>
+                <div id="hello" class="collapse show" aria-labelledby="hello_header" data-parent="#accordion">
+                  <div class="card-body">
+                    Hello! We are small research collaboration at University of Southern California, University of Illinois Urbana-Champaign and
+                      University of California Los Angeles trying to build AI tools to help better understand the work journalists do.
+                    <br><br>
+                    Our goal in this work is to study how articles unfold over time — ultimately we'd like to build tools to help local news rooms allocate resources for breaking stories.
+                      First, we need to study how seasoned editors go about editing and updating stories.
+                    <br><br>
+                    We are calibrating our payment scheme <b>to meet a $25 per hour wage</b>. Apologies if at first it is miscalibrated, we're not sure at
+                      this moment how long the tasks will take.
+                      <br><br>
+                    Please take a moment to review some of the <b><u>Examples</u></b> and skim the <b><u>Instructions</u></b> in the sections below. If you've already watched the <b><u>Video</u></b> and have a good idea of the task, feel free to skip that section.
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" type="button" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Instructions
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <i><u><b>NOTE: THIS SECTION IS OLD. The updated instructions should go here.</b></u></i>
+                        <br><br>
+                        You will be adding, deleting and moving sentences around in a news article to anticipate what a future version looks like.
+                        <br><br>
+                        * <b><u>Add a sentence</u></b> either <i>below</i> or <i>above</i> the current sentence by pressing the <span style="background-color: rgba(0,160,0,0.63)">Add &uarr;</span> or <span style="background-color: rgba(0,160,0,0.63)">Add &darr;</span> buttons. Adding a sentence means that you feel there is substantially new information, a novel viewpoint or quote, or necessary background
+                        information that needs to be present.
+                        <br><br>
+                        * <b><u>Move a sentence</u></b> by dragging it around on the canvas. Moving a sentence,  (or what we're calling <b><i>refactoring</i></b>) means that the importance of a sentence should be either increased or decreased within the article. <b><u>Please note:</u></b> refactors are rare!
+                        <br><br>
+                        * <b><u>Delete a sentence</u></b> by hitting the <span style="background-color: rgba(0,160,0,0.63)">Delete</span> button. Deleting an <b>Added</b> sentence just reverses that action - we will not record this. Deleting a sentence that is present means you feel it needs to be (a) substantially rewritten (ergo: a new sentence should also be <b>Added</b>), or (b) the sentence no longer applies given new information that was added.
+                        <br><br>
+                        * <b><u>Edit a sentence</u></b> by hitting the <span style="background-color: rgba(0,160,0,0.63)">Edit</span> button. Editing a sentence means that the wording might change a little bit due to other changes happening around the sentence or events within the sentence being updated.
+                        <br><br>
+                        * <b><u>Leaving a sentence unchanged</u></b> means that you don't really expect the sentence to change at all in the next version of the article.
+                        <br><br>
+                        When you're ready to submit, please hit the <span style="background-color: rgba(0,160,0,0.63)">Submit</span> button and please check to see what the actual edits were so you can improve for next task!
+                    </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" type="button" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                      Video
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <i><b><u>NOTE: THIS SECTION IS OLD. An updated video can go here.</u></b></i>
+                        <br><br>
+                        Here is a video showing how to interact with our page and a demonstration of the thought process I think is appropriate for this task. However, you are professional journalists and you know better than I do!
+                        <br><br>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/nEF6uVoSZdE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" type="button" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Examples
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <i><u><b>NOTE: THIS SECTION IS OLD. Updated examples links can go here if we find good ones, and I can host them on app-engine pretty easily. Or, we can just take screenshots.</b></u></i>
+                        <h5>Local Crime</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="https://news-edits-dot-usc-research.appspot.com/check_task?source=reuters&doc_id=2436&v_x=0&v_y=1">https://news-edits-dot-usc-research.appspot.com/check_task?source=reuters&doc_id=2436&v_x=0&v_y=1</a>
+                        </div>
+                        The above example is a good example of a local crime article where the phrase "...no mention of..." indicates that an upcoming draft will include deletions (of that sentence) and additions of new information.
+                        <hr>
+                        <!--                        -->
+                        <h5>Events update:</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=independent&doc_id=1587638&v_x=1&v_y=2</a>
+                            <br>
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=nyt&doc_id=1828967&v_x=1&v_y=2</a>
+                        </div>
+                        In both of these articles, an event is unfolding. They are both clearly breaking news, so as more information about the main event comes in, we will update the article.
+                        <hr>
+                        <!--                        -->
+                        <h5>More information about the main event</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=nyt&doc_id=1870033&v_x=0&v_y=1</a>
+                        </div>
+                        The phrase "This is a developing story" is really a good clue in this example.
+                        <hr>
+                        <!--                        -->
+                        <h5>More background:</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=wp&doc_id=1115575&v_x=0&v_y=1</a>
+                        </div>
+                        This article needed a lot more background.
+                        <hr>
+                        <!--                        -->
+                        <h5>More viewpoints:</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=wp&doc_id=1125102&v_x=0&v_y=1</a>
+                        </div>
+                         This is a good example of a piece where we really need to hear from more voices, like parents, anonymous sources, etc.
+                        <hr>
+                        <h5>Article Rewrite</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=ap&doc_id=220&v_x=2&v_y=3</a>
+                        </div>
+                        Good example of when the old article wasn't really written in a newsy style and needed to be updated.
+                        <hr>
+                        <!--                        -->
+                        <h5>Many Edits</h5>
+                        <div class="example">
+                            <a target='_blank' rel='noopener noreferrer' href="">https://news-edits-dot-usc-research.appspot.com/check_task?source=bbc&doc_id=1248390&v_x=1&v_y=2</a>
+                        </div>
+                        This article is really dense. There are a lot of time-dependent numbers here, so it's likely that a lot of them will be updated. Also, an additional viewpoint is added.
+                    </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="todoHeader">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" type="button" data-target="#toDo" aria-expanded="false" aria-controls="collapseThree">
+                      TO-DO Before Launch
+                    </button>
+                  </h5>
+                </div>
+                <div id="toDo" class="collapse" aria-labelledby="todoHeader" data-parent="#accordion">
+                    <div class="card-body">
+                        We have the following items on our to-do list for the interface before we launch it:
+                        <br>
+                        <br>
+                        <ul>
+                            <li>Task Semantics:
+                                <ul>
+                                    <li>Finalize schema with appropriate addition/deletion/edit sub-schemas</li>
+                                    <li>Write instructions</li>
+                                </ul>
+                            </li>
+                            <li>Annotation: Annotate a subset of documents ourselves, in order to:
+                                <ul>
+                                    <li>Collect good challenging/interesting/pedagogical examples for the instructions.</li>
+                                    <li>Collect a gold dataset with which to recruit workers.</li>
+                                </ul>
+                            </li>
+                            <li>Visual/Technical Interface Upgrades:
+                                <ul>
+                                    <li>Put labels for edit-dropdown on the bezier-curves </li>
+                                    <li>Put an additional textfield or dropdown in each addition/deletion box so that the user can note if the addition/deletion corresponds to an update.</li>
+                                    <li>Put an additional "+" sign by each dropdown so that we can allow users to add >1 intention per edit.</li>
+                                    <li>Make the entire layout response to size-changes for dropdowns results from the previous two changes.</li>
+                                    <li>Make sure we're collecting all the data on submission, test on Amazon.</li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+
+
+
+<form name='mturk_form' method='post' id='mturk_form' action='/mturk/externalSubmit'>
+<input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+<div class="jtk-page-container">
+    <div class="jtk-container">
+        <div class="jtk-demo-main">
+            <div class="table table-hover container">
+                <p>Article Key: {{ doc_id }}</p>
+                <br>
+                <div class="row header">
+                    <div class="col-2"></div>
+                    <div class="col-3"><h4>Old Version</h4></div>
+                    <div class="col-1"></div>
+                    <div class="col-3"><h4>New Version</h4></div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="row text jtk-demo-canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas">
+                    <div class="col-2 labelblock_pool_x"></div>
+                    <div class="col-3 textblock_pool_version_x" doc_id="{{ doc_id }}" ></div>
+                    <div class="col-1 filler" doc_id="{{ doc_id }}" ></div>
+                    <div class="col-3 textblock_pool_version_y" doc_id="{{ doc_id }}" ></div>
+                    <div class="col-2 labelblock_pool_y"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="submit" id='submitButton' value='Submit'>Submit form</button>
+</form>
+
+<script language='Javascript'>
+
+    function zip() {
+        for (var i = 0; i < arguments.length; i++) {
+            if (!arguments[i].length || !arguments.toString()) {
+                return false;
+            }
+            if (i >= 1) {
+                if (arguments[i].length !== arguments[i - 1].length) {
+                    return false;
+                }
+            }
+        }
+        var zipped = [];
+        for (var j = 0; j < arguments[0].length; j++) {
+            var toBeZipped = [];
+            for (var k = 0; k < arguments.length; k++) {
+                toBeZipped.push(arguments[k][j]);
+            }
+            zipped.push(toBeZipped);
+        }
+        return zipped;
+    }
+
+    function get_word_diff_ratio(s_old, s_new) {
+        var s_old_words = s_old.split(' ')
+        var s_new_words = s_new.split(' ')
+        var s = new difflib.SequenceMatcher(null, s_old_words, s_new_words)
+        return s.ratio()
+    }
+
+    function get_list_diff(l_old, l_new){
+        var vars_old = []
+        var vars_new = []
+        var diffs = difflib.ndiff(l_old, l_new)
+        var in_question = false
+        diffs.forEach(function(item, idx){
+            var label = item[0]
+            var text = item.slice(2)
+            if (label == '?'){
+                return
+            }
+
+            else if (label == '-'){
+                vars_old.push({
+                    'text': text,
+                    'tag': '-'
+                })
+                if (
+                        // if something is removed from the old sentence, a '?' will be present in the next idx
+                        ((idx < diffs.length - 1) && (diffs[idx + 1][0] == '?'))
+                        // if NOTHING is removed from the old sentence, a '?' might still be present in 2 idxs, unless the next sentence is a - as well.
+                     || ((idx < diffs.length - 2) && (diffs[idx + 2][0] == '?') && (diffs[idx + 1][0] != '-'))
+                ){
+                    in_question = true
+                    return
+                }
+                // test if the sentences are substantially similar, but for some reason ndiff marked them as different.
+                if ((idx < (diffs.length - 1)) && (diffs[idx + 1][0] == '+')){
+                    var text_new = diffs[idx + 1].slice(2)
+                    if (get_word_diff_ratio(text, text_new) > .8) {
+                        in_question = true
+                        return
+                    }
+                }
+                vars_new.push({
+                    'text': '',
+                    'tag': ' '
+                })
+            }
+            else if (label == '+'){
+                vars_new.push({
+                    'text': text,
+                    'tag': '+'
+                })
+                if (in_question){
+                    in_question = false
+                }
+                else{
+                    vars_old.push({
+                        'text':'',
+                        'tag': ' '
+                    })
+                }
+            }
+            else {
+                vars_old.push({
+                    'text': text,
+                    'tag': ' '
+                })
+                vars_new.push({
+                    'text': text,
+                    'tag': ' '
+                })
+            }
+        })
+        return [vars_old, vars_new]
+    }
+
+    function get_word_diffs(s_old, s_new) {
+        var s_old_words = s_old.split(' ')
+        var s_new_words = s_new.split(' ')
+        return get_list_diff(s_old_words, s_new_words)
+    }
+
+    function html_compare_sentences(old_sent, new_sent) {
+        var sents = get_word_diffs(old_sent, new_sent)
+        old_sent = sents[0]
+        new_sent = sents[1]
+        var new_html = []
+        var old_html = []
+        var max_idx = Math.max(old_sent.length, new_sent.length)
+        for (var idx = 0; idx < max_idx; idx++) {
+            var w_old = old_sent[idx]
+            var w_new = new_sent[idx]
+            if (w_old['tag'] == '-') {
+                old_html.push('<span class="deleted">' + w_old['text'] + '</span>')
+            } else {
+                old_html.push(w_old['text'])
+            }
+            if (w_new['tag'] == '+') {
+                new_html.push('<span class="added">' + w_new['text'] + ' </span>')
+            } else {
+                new_html.push(w_new['text'])
+            }
+        }
+        return [old_html.join(' '), new_html.join(' ')]
+    }
+
+    var window_height = $( window ).height();
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+    String.prototype.toTitleCase = function() {
+        var target = this;
+        return target.replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
+    };
+    Array.prototype.remove_duplicates = function() {
+        var arr = this;
+        let s = new Set(arr);
+        let it = s.values();
+        return Array.from(it);
+    };
+    Array.prototype.remove_by_value = function(val) {
+      for (var i = 0; i < this.length; i++) {
+        if (this[i] === val) {
+          this.splice(i, 1);
+          i = i - 1;
+        }
+      }
+      return this;
+    };
+
+    // page handling
+    class PageManager {
+        constructor(
+            data,
+            textblock_dim,
+            demo,
+            check,
+            doc_key,
+            textblock_pool_min
+        ) {
+            this.data = data
+            this.demo = demo
+            this.check = check
+            this.doc_key = doc_key
+            // dimensions for textblock divs
+            this.textblock_pool_min = textblock_pool_min
+            this.textblock_dim = textblock_dim;
+            this.start_line_id = null
+            // z-index for dropdown needs to increase every click :/ maybe not the best implementation
+            this.curr_dropdown_zindex = 3
+            this._init_jsplumb()
+            this.num_lines= 0
+            this.node_to_arc_dict = {} // map each node to a list of arcs
+            this.arc_to_node_dict = {} // map each arc to the nodes on either side of it
+            this.arc_to_obj_dict = {}
+        }
+
+        _init_jsplumb(){
+            var that = this
+            that.instance = window.jsp = jsPlumb.getInstance({
+                ConnectionOverlays: [
+                    [ "Arrow", {
+                        location: 1,
+                        visible:true,
+                        width:11,
+                        length:11,
+                        id:"ARROW",
+                    } ],
+                ],
+                Container: "canvas",
+                Endpoint:[ "Dot", { radius: 3 },  ],
+            });
+
+            // .. and this is the hover style.
+            const connectorHoverStyle = {
+                strokeWidth: 3,
+                stroke: "#216477",
+                outlineWidth: 5,
+                outlineStroke: "white",
+            }
+            const endpointHoverStyle = {
+                fill: "#216477",
+                stroke: "#216477"
+            }
+            // the definition of source endpoints (the small blue ones)
+            this.endpoint = {
+                endpoint: "Dot",
+                paintStyle: {
+                    stroke: "#7AB02C",
+                    fill: "gray",
+                    radius: 5,
+                    strokeWidth: 1
+                },
+                isDetachable: false,
+                isSource: true,
+                connector: [ "Bezier", { curviness: 50, alwaysRespectStubs: true } ],
+                hoverPaintStyle: endpointHoverStyle,
+                connectorHoverStyle: connectorHoverStyle,
+            }
+        }
+
+        _draw_all_connections(){
+            var that = this
+            // draw the connections
+            $(this.data.arcs).each( function(i, d) {
+                if ((d.sent_idx_x != null) && (d.sent_idx_y != null)) {
+                    that._draw_connection(d.sent_idx_x, d.sent_idx_y, d.line_sel)
+                }
+            })
+        }
+
+        draw_canvas(){
+            var that = this
+            this.versions = this.data['nodes'].map(function(d){return d['version']})
+            this.x_vers = d3.min(that.versions)
+            this.y_vers = d3.max(that.versions)
+            this.version_mapper = {[that.x_vers]: 'x', [that.y_vers] : 'y'}
+            this.add_del_redundancy = {'x': [], 'y': [] }
+            this.node_edit_action_dict = {'x': {}, 'y': {}}
+
+            // create textblocks
+            $(this.data.nodes).each(function (i, d) {
+                var vers = that.version_mapper[d.version]
+                that.create_textblock(d.sentence, vers, d.sent_idx)
+                that.add_del_redundancy[vers].push(d.sent_idx)
+                that.node_edit_action_dict[vers][d.sent_idx] = 'unchanged'
+            })
+
+            // create links between edited segments and update the PageManager's classes
+            $(this.data.arcs).each( function(i, d){
+                if ((d.sent_idx_x != null ) && (d.sent_idx_y != null)){
+                    var sel = that.update_node_data_with_new_connection(d.sent_idx_x, d.sent_idx_y)
+                    d.line_sel = sel
+                    that.add_del_redundancy['x'].remove_by_value(d.sent_idx_x)
+                    that.add_del_redundancy['y'].remove_by_value(d.sent_idx_y)
+                    that.node_edit_action_dict['x'][d.sent_idx_x] = 'edited-' + d.sent_idx_y
+                    that.node_edit_action_dict['y'][d.sent_idx_y] = 'edited-' + d.sent_idx_x
+                }
+            })
+
+            // delete/add
+            $(that.add_del_redundancy['x']).each(function(i, d){
+                $('#sentence-x-' + d).addClass('deleted')
+                that.node_edit_action_dict['x'][d] = 'deleted'
+            })
+            $(that.add_del_redundancy['y']).each(function(i, d){
+                $('#sentence-y-' + d).addClass('added')
+                that.node_edit_action_dict['y'][d] = 'added'
+            })
+
+            // create label-boxes
+            $(this.data.nodes).each(function (i, d) {
+                var vers = that.version_mapper[d.version]
+                that.create_label_block(vers, d.sent_idx, that.node_edit_action_dict[vers][d.sent_idx])
+            })
+            this._draw_all_connections()
+        }
+
+        _get_new_connection_idx(){
+            this.num_lines =  this.num_lines + 1
+            return this.num_lines
+        }
+
+        _draw_connection(left_id, right_id, line_selector){
+            var left_id = 'sentence-x-' + left_id
+            var right_id = 'sentence-y-' + right_id
+            this.instance.addEndpoint(
+                left_id,
+                this.endpoint,
+                { anchor: "RightMiddle",  uuid: left_id + "RightMiddle", connectionsDetachable: false, cssClass: 'endpoint'}
+            );
+            this.instance.addEndpoint(
+                right_id,
+                this.endpoint,
+                { anchor: "LeftMiddle", uuid: right_id + "LeftMiddle" , connectionsDetachable: false, cssClass: 'endpoint'}
+            );
+            var con = this.instance.connect({
+                uuids: [left_id + "RightMiddle", right_id + "LeftMiddle"],
+                {#editable: false,#}
+                isDetachable: false,
+                cssClass: line_selector + ' line',
+            })
+            this.arc_to_obj_dict[line_selector] = con
+            return con
+        }
+
+        _get_all_text_connected_to_one_node(node_selector, other_side){
+            var that = this
+            var node_text = $('#' + node_selector).attr('orig-text')
+            var arcs = this.node_to_arc_dict[node_selector]
+            var all_incoming_text = arcs
+                .map(function(d){ return that.arc_to_node_dict[d][other_side]})
+                .sort(function( d1, d2) { return d1.split('-')[2] - d2.split('-')[2]})
+                .map(function(d) {return $('#' + d).attr('orig-text')} )
+
+
+            if (other_side == 'y'){
+                return html_compare_sentences(node_text, all_incoming_text.join(' '))[0]
+            } else {
+                return html_compare_sentences(all_incoming_text.join(' '), node_text)[1]
+            }
+        }
+
+        // update internal data structures
+        update_node_data_with_new_connection(left_textblock, right_textblock){
+            var line_selector = 'line-' + this._get_new_connection_idx()
+            // update diff text for all lines leading into a node
+            var textblock_x_selector = 'sentence-x-' + left_textblock
+            var textblock_y_selector = 'sentence-y-' + right_textblock
+
+            this.node_to_arc_dict[textblock_x_selector] = (this.node_to_arc_dict[textblock_x_selector] || []).concat(line_selector)
+            this.node_to_arc_dict[textblock_y_selector] = (this.node_to_arc_dict[textblock_y_selector] || []).concat(line_selector)
+            this.arc_to_node_dict[line_selector] = {'x':  textblock_x_selector, 'y': textblock_y_selector}
+
+            var x_html_all = this._get_all_text_connected_to_one_node(textblock_x_selector, 'y')
+            $('#' + textblock_x_selector).html(x_html_all)
+            var y_html_all = this._get_all_text_connected_to_one_node(textblock_y_selector, 'x')
+            $('#' + textblock_y_selector).html(y_html_all)
+
+            return line_selector
+        }
+
+        create_textblock(selected_text, version, block_id){
+            var that = this
+            // create textblock element for the righthand side
+            var textblock_pool = $('.textblock_pool_version_' + version)
+
+            // create textblock div
+            var textblock_row = document.createElement('div')
+            $(textblock_row).addClass('row')
+
+            //
+            var textblock_div = document.createElement('div')
+            $(textblock_div)
+                .addClass('textblock') //  window jtk-node')
+                .attr('doc_id', that.doc_key)
+                .attr('id', 'sentence-' + version + '-' + block_id)
+                .attr('orig-text', selected_text)
+                .attr('version', version)
+                .attr('orig-html', '<span class="textblock_span">' + selected_text + '</span>')
+                .attr('html-all', '<span class="textblock_span">' + selected_text + '</span>')
+
+            var textblock_span = document.createElement('span')
+            $(textblock_span).addClass('textblock_span')
+            textblock_span.textContent = selected_text
+
+            // append elements to the textblock
+            $(textblock_div).append(textblock_span)
+
+            // handle line-drawing
+            if (! this.demo){
+                $(textblock_div).bind('contextmenu', function(e) { e.preventDefault(); })
+            }
+
+            // append textblock to the pool of textblocks
+            $(textblock_row).append(textblock_div)
+            $(textblock_row).appendTo(textblock_pool)
+
+            // dynamically resize the height of the textblock pool
+            var multiplier = 2
+            var new_height = d3.sum(
+                textblock_pool.find('.textblock').map(function(i, d){
+                    return $(d).height() + multiplier * (
+                        that.textblock_dim.margin + that.textblock_dim.border + that.textblock_dim.padding
+                    )
+            }))
+           $(textblock_pool).css('height', d3.max([this.textblock_pool_min, new_height]))
+        }
+
+        create_label_block(version, block_id, edit_type) {
+            var that = this
+            var label_pool = $('.labelblock_pool_' + version)
+
+            // create textblock div
+            var label_row = document.createElement('div')
+            $(label_row).addClass('row')
+
+            //
+            var label_div = document.createElement('div')
+            $(label_div)
+                .addClass('labelblock')
+                .attr('doc_id', that.doc_key)
+                .attr('id', 'label-' + version + '-' + block_id)
+
+            if ((edit_type.split('-')[0] == 'edited' ) & (version == 'y')){
+                $(label_div)
+                    .addClass('hidden')
+            }
+
+
+            var label_span = document.createElement('span')
+            $(label_span).addClass('label_span')
+
+            // append elements to the textblock
+            $(label_div).append(label_span)
+
+            var header = ''
+            if (edit_type == 'added'){
+                header = 'Addition Intention'
+            } else if (edit_type.split('-')[0] == 'edited'){
+                header = 'Edit Intention'
+            } else if (edit_type == 'deleted'){
+                header = 'Deletion Intention'
+            }
+
+            var edit_html =`
+                <select class="edit-intention">
+                    <option value="" selected disabled></option>
+                    <option value="" disabled>Clarification</option>
+                    <option value="">&#160;&#160;&#160;Simplification</option>
+                    <option value="">&#160;&#160;&#160;Define term</option>
+                    <option value="" disabled>Copy Editing</option>
+                    <option value="">&#160;&#160;&#160;Style Changes</option>
+                    <option value="">&#160;&#160;&#160;Syntax Correction</option>
+                    <option value="" disabled>Elaboration</option>
+                    <option value="">&#160;&#160;&#160;Background</option>
+                    <option value="">&#160;&#160;&#160;Analysis</option>
+                    <option value="" disabled>Fact Update</option>
+                    <option value="">&#160;&#160;&#160;Event Update</option>
+                    <option value="">&#160;&#160;&#160;Quote Update</option>
+                    <option value="">&#160;&#160;&#160;Document Update</option>
+                    <option value="" disabled>Verification</option>
+                    <option value="">&#160;&#160;&#160;Correction</option>
+                    <option value="">&#160;&#160;&#160;Additional Sourcing</option>
+                </select>
+            `
+            $(label_div).html('<p>' + header + '</p>' + edit_html)
+
+            $(label_row).append(label_div)
+            $(label_row).appendTo(label_pool)
+            $(label_div).draggable()
+
+            var textblock_row = $('#sentence-' + version + '-' + block_id).parent('.row')
+            var textblock_height = $(textblock_row).height()
+            var this_height = $(label_row).height()
+            var height = d3.max([textblock_height, this_height])
+            // append textblock to the pool of textblocks
+            $(textblock_row).height(height)
+            $(label_row).height(height)
+        }
+
+        _post_drawing_page(){
+            const this_pagemanager = this
+            $('.textblock')
+                .on('mouseover', function(){
+                    var this_textblock = this
+                    $(this_textblock).addClass('shaded')
+
+                    // update all the nodes on the other side as this node.
+                    var node_arcs = this_pagemanager.node_to_arc_dict[this.id] || []
+                    var version = $(this_textblock).attr('version')
+                    var version_swap = {'x':'y', 'y':'x'}
+                    var other_version = version_swap[version]
+                    node_arcs.forEach(function(d){
+                        // shade the arc itself
+                        $('.' + d).addClass('shaded')
+                        // get other textblock and the html that it should update to.
+                        var other_textblock_sel = this_pagemanager.arc_to_node_dict[d][other_version]
+                        // shade the other textblock that the arc connects
+                        $('#' + other_textblock_sel).addClass('shaded')
+                    })
+                })
+                .on('mouseout', function(d) {
+                    $('.connection').removeClass('shaded')
+                    $('.textblock').removeClass('shaded')
+                })
+
+        }
+    }
+
+    textblock_dims = {
+		'margin': 5,
+		'border': 2,
+		'padding': 10
+	}
+
+	textblock_pool_min_height = 200
+
+    jsPlumb.ready(function () {
+        var data = JSON.parse('{{ data | tojson | safe }}'.replaceAll('NaN', 'null'))
+        {#var data = JSON.parse('{{ data | safe }}'.replaceAll('NaN', 'null'))#}
+        pm = new PageManager(data, textblock_dims, false, false, "{{ doc_id }}", textblock_pool_min_height)
+        pm.draw_canvas()
+        pm._post_drawing_page()
+    })
+
+    //
+    // mturk
+    // handle data
+    class SubmitHandler{
+        constructor() {
+            turkSetAssignmentID();
+            this.GENERIC_THANKS_MESSAGE = 'Thank you so much for your help with our task!'
+        }
+
+        get_data_from_dom() {
+            this.output = []
+            var ids = $('.labelblock').map(function(i, d){return $(d).attr('id')})
+            var versions = $(ids).map(function(i, d){return d.split('-')[1]})
+            var sent_idxs = $(ids).map(function(i, d){return d.split('-')[2]})
+            var labels = $('.labelblock').find(":selected").map(function(i, d){ return $(d).text()})
+            var is_hidden = $('.labelblock').map(function(i, d){return $(d).hasClass('hidden')})
+            for (var i = 0; i < versions.length; i++){
+                var datum = {}
+                datum['version'] = versions[i]
+                datum['sent_idx'] = sent_idxs[i]
+                var action = pm.node_edit_action_dict[versions[i]][sent_idxs[i]]
+                if (action.split('-')[0] == 'edited'){
+                    datum['action'] = 'edited'
+                    datum['other_version_sent_idx'] = action.split('-')[1]
+                } else {
+                    datum['action'] = action
+                }
+                datum['is_hidden'] = is_hidden[i]
+                datum['label'] = labels[i]
+                this.output.push(datum)
+            }
+        }
+
+        gather_and_submit_data(submit_button, submit_click_event) {
+            this.submit_button = submit_button
+            this.submit_click_event = submit_click_event
+            this.get_data_from_dom()
+            this.first_confirm() // -> second_confirm -> third_confirm -> submit_data
+        }
+
+        first_confirm(){
+            var that = this
+            // First question
+            var non_hidden_data = that.output.filter(function(d, i){ return d['is_hidden'] == false })
+            var uncompleted = non_hidden_data.map(function(d){return d['label'] == ''})
+            if (d3.sum(uncompleted) > 0){
+                alert('You have at least one unfilled intention-box. Please check and resubmit!!')
+            } else {
+                that.second_confirm()
+            }
+        }
+
+        second_confirm(){
+            var that = this
+            setTimeout(function() {
+                alertify.confirm(
+                    "Great! Your submission is valid. Do you want to recheck your answers?"
+                ).set('header', '<em>Looks good! Ready to Submit?</em>')
+                    .set('labels', {
+                        ok: "Continue, submit!",
+                        cancel: "Let me recheck..."
+                    })
+                    .set('onok', function () {
+                        alertify.success('Ok! Submitting...')
+                        alertify.success(that.GENERIC_THANKS_MESSAGE)
+                        that.submit_data()
+                    })
+                    .set('oncancel', function () {
+                        alertify.error('Thanks for being diligent! Please recheck and resubmit!')
+                    })
+            }, 700)
+        }
+        submit_data(){
+            {% if do_mturk %}
+            // submit mturk
+            $('#data').attr('value', JSON.stringify(this.output))
+            $(this.submit_button).trigger(this.submit_click_event.type);
+            {% else %}
+            // submit AJAX
+            var to_submit = {'data': this.output}
+            to_submit['start_time'] = "{{ start_time }}"
+            to_submit['doc_id'] = "{{ doc_id | safe }}"
+            $.ajax({
+                url: "/post_task",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(to_submit),
+                success: function (result) {
+                    if (result === "success") location.href = "/check_task"
+                }
+            })
+            {% endif %}
+        }
+    }
+
+    // submit button click
+    var clicked=false
+    $('#submitButton').on('click', function(submit_click_event){
+        var sh = new SubmitHandler()
+        var submit_button = this
+        submit_click_event.preventDefault();
+        sh.gather_and_submit_data(submit_button, submit_click_event);
+    })
+
+</script>
+</body>
+</html>
+<!-- YOUR HTML ENDS -->
+
+{% if do_mturk %}
+]]>
+</HTMLContent>
+<FrameHeight>600</FrameHeight>
+</HTMLQuestion>
+{% endif %}
