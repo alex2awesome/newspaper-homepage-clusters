@@ -1,0 +1,241 @@
+<HTMLQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2011-11-11/HTMLQuestion.xsd">
+<HTMLContent><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
+    <title>Article Clustering</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            margin: 1em;
+            padding: 0.5em;
+        }
+
+        section {
+            margin: 1em;
+            border: 1px solid black;
+            padding: 1em;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .cluster {
+            margin: 1em 0;
+        }
+
+        .selected {
+            background-color: #CCC;
+        }
+        
+        .bubble {
+            pointer-events: none;
+        }
+
+
+        #outer-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #col-wrapper {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+        }
+
+        section {
+            flex: 1;
+            overflow-y: scroll;
+        }
+
+        section img {
+            max-width: 100%;
+        }
+
+        #clusters .cluster {
+            border: 2px solid blue;
+        }
+
+        #clusters .cluster li {
+            border: 2px dotted blue;
+        }
+
+        #articles li {
+            border: 2px dotted blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="outer-wrapper">
+        <div id="header">
+            <h1>Article Clustering Interface</h1>
+
+            <p>Click on an article to add it to the selected cluster. If no cluster is selected, a new one will be created.</p>
+            <p>Click on a cluster to select it. Click on an article in a cluster to remove it.</p>
+        </div>
+        <form id="result-form" method="POST" action='/mturk/externalSubmit'>
+            <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+            <input type="hidden" name="result" id="result-input">
+            <input type="submit" value="Submit">
+        </form>
+        <div id="col-wrapper">
+            <section>
+                <img src="https://cdn.jsdelivr.net/gh/MDZHX/news-clusters-pub@main/screenshots_50_1/screenshot_{{ doc_id }}.png" />
+            </section>
+        
+            <section id="clusters-section">
+                <h2>Current Clusters</h2>
+                <ul id="clusters">
+                    <!-- Clusters will be injected here -->
+                </ul>
+            </section>
+        
+            <section id="article-list">
+                <h2>Available Articles</h2>
+                <ul id="articles">
+                    <!-- Articles will be injected here -->
+                </ul>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        turkSetAssignmentID();
+
+        const articles = {{ articles | tojson | safe }};
+        let clusters = {{ clusters | tojson | safe }};
+
+        let selectedClusterIndex = null;
+
+        const articlesEl = document.getElementById('articles');
+        const clustersEl = document.getElementById('clusters');
+        const resultForm = document.getElementById('result-form');
+        const resultInput = document.getElementById('result-input');
+
+        function renderArticles() {
+            articlesEl.innerHTML = '';
+            articles.forEach(article => {
+                const li = document.createElement('li');
+
+                const title = document.createElement('h4');
+                title.textContent = article.link_text;
+                title.className = 'bubble';
+                li.appendChild(title);
+
+                const body = document.createElement('p');
+                body.textContent = article.content;
+                body.className = 'bubble';
+                li.appendChild(body);
+
+                li.dataset.id = article.id;
+                li.addEventListener('click', handleArticleClick);
+                articlesEl.appendChild(li);
+            });
+        }
+
+        function renderClusters() {
+            clustersEl.innerHTML = '';
+            clusters.forEach((cluster, index) => {
+                const div = document.createElement('div');
+                div.className = 'cluster';
+                if (index === selectedClusterIndex) {
+                    div.classList.add('selected');
+                }
+                div.dataset.id = index;
+                const h3 = document.createElement('h3');
+                h3.textContent = 'Cluster ' + (index + 1);
+                div.appendChild(h3);
+
+                const ul = document.createElement('ul');
+                cluster.forEach(article => {
+                    const li = document.createElement('li');
+
+                    const title = document.createElement('h4');
+                    title.textContent = article.link_text;
+                    title.className = 'bubble';
+                    li.appendChild(title);
+
+                    const body = document.createElement('p');
+                    body.textContent = article.content;
+                    body.className = 'bubble';    
+                    li.appendChild(body);
+
+                    li.dataset.id = article.id;
+                    li.addEventListener('click', handleClusterArticleClick);
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+
+                div.addEventListener('click', handleClusterClick);
+                clustersEl.appendChild(div);
+            });
+        }
+
+        function handleArticleClick(e) {
+            const id = e.target.dataset.id;
+            const articleIndex = articles.findIndex(article => article.id == id);
+            if (articleIndex === -1) return;
+            const article = articles.splice(articleIndex, 1)[0];
+            if (selectedClusterIndex === null) {
+                clusters.push([article]);
+                selectedClusterIndex = clusters.length - 1;
+            } else {
+                clusters[selectedClusterIndex].push(article);
+            }
+            renderArticles();
+            renderClusters();
+        }
+
+        function handleClusterArticleClick(e) {
+            e.stopPropagation();
+            const id = e.target.dataset.id;
+            const clusterId = Number(e.target.closest('.cluster').dataset.id);  // Convert id to number
+            const cluster = clusters[clusterId];
+            const articleIndex = cluster.findIndex(article => article.id == id);
+            if (articleIndex === -1) return;
+            const article = cluster.splice(articleIndex, 1)[0];
+            if (cluster.length === 0) {
+                clusters.splice(clusterId, 1);
+                if (selectedClusterIndex === clusterId) {
+                    selectedClusterIndex = null;
+                } else if (selectedClusterIndex !== null && selectedClusterIndex > clusterId) {
+                    selectedClusterIndex--;
+                }
+            }
+            articles.push(article);
+            renderArticles();
+            renderClusters();
+        }
+
+        function handleClusterClick(e) {
+            const id = Number(e.currentTarget.dataset.id);  // Convert id to number
+            if (selectedClusterIndex === id) {
+                selectedClusterIndex = null;
+            } else {
+                selectedClusterIndex = id;
+            }
+            renderClusters();
+        }
+
+        resultForm.addEventListener('submit', (e) => {
+            resultInput.value = JSON.stringify(clusters);
+        });
+
+        renderArticles();
+        renderClusters();
+    </script>
+</body>
+</html>
+]]>
+</HTMLContent>
+<FrameHeight>600</FrameHeight>
+</HTMLQuestion>

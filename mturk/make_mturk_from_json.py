@@ -31,9 +31,17 @@ def render_page(
         autoescape=select_autoescape(['html', 'xml'])
     )
 
+    articles = None
+    clusters = None
+    if 'articles' in data:
+        articles = data['articles']
+        clusters = data['clusters']
+
     template = env.get_template(template_fn)
     html = template.render(
         data=data,
+        articles=articles,
+        clusters=clusters,
         doc_id=data_id,
         do_mturk=True,
         start_time=str(datetime.datetime.now()),
