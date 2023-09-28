@@ -1,4 +1,5 @@
 app/data
+data
 other
 mturk/tasks_to_launch
 scripts/fasttext_model__news-classification.bin
